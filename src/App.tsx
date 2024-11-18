@@ -1,25 +1,48 @@
-import Header from "./components/landingPage/Header";
-import Hero from "./components/landingPage/HeroSection";
-import CTA from "./components/landingPage/Cta";
-import Footer from "./components/landingPage/Footer";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import LandingPageComponent from "./components/landingPage/LandingPage";
+import SignInPageComponent from "./components/(auth)/SignIn";
+import SignUpPageComponent from "./components/(auth)/SignUp";
+import HomePageComponent from "./components/Dashboard/HomePage";
+
+import Sidebar from "./lib/utils";
+
 const Layout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-
-      <main className="flex-grow">
-        <div className="flex flex-col gap-16 md:gap-24">
-          <div className="mt-36">
-            <Hero />
-          </div>
-
-          <CTA />
-        </div>
+    <div className="flex">
+      <Sidebar />
+      <main className="flex-1 md:ml-64 p-6">
+        <Outlet />
       </main>
-
-      <Footer />
     </div>
   );
 };
 
-export default Layout;
+const appRouting = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPageComponent />,
+  },
+  {
+    path: "/Sign-in",
+    element: <SignInPageComponent />,
+  },
+  {
+    path: "/Sign-up",
+    element: <SignUpPageComponent />,
+  },
+  {
+    path: "/Home",
+    element: <Layout />,
+    children: [
+      {
+        path: "/Home",
+        element: <HomePageComponent />,
+      },
+    ],
+  },
+]);
+const App = () => {
+  return <RouterProvider router={appRouting} />;
+};
+
+export default App;

@@ -25,9 +25,9 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="hidden lg:block w-[45%] h-[500px] relative">
+          <div className="hidden lg:block w-[45%] h-[500px] relative -mt-28">
             <img
-              src="/api/placeholder/600/500"
+              src="/public/LandingPage.png"
               alt="Digital organization illustration"
               className="w-full h-full object-contain"
             />
