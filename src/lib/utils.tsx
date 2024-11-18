@@ -6,18 +6,25 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 import { Link } from "react-router-dom";
-import { Twitter, Youtube, FileText, Link2, Hash } from "lucide-react";
+import { Twitter, Youtube, FileText, Link2 } from "lucide-react";
 
 const navItems = [
-  { icon: <Twitter className="w-5 h-5" />, label: "Tweets", href: "/tweets" },
-  { icon: <Youtube className="w-5 h-5" />, label: "Videos", href: "/videos" },
+  {
+    icon: <Twitter className="w-5 h-5" />,
+    label: "Tweets",
+    href: "/Home/tweets",
+  },
+  {
+    icon: <Youtube className="w-5 h-5" />,
+    label: "Videos",
+    href: "/Home/videos",
+  },
   {
     icon: <FileText className="w-5 h-5" />,
     label: "Documents",
-    href: "/documents",
+    href: "/Home/documents",
   },
-  { icon: <Link2 className="w-5 h-5" />, label: "Links", href: "/links" },
-  { icon: <Hash className="w-5 h-5" />, label: "Tags", href: "/tags" },
+  { icon: <Link2 className="w-5 h-5" />, label: "Links", href: "/Home/links" },
 ];
 
 const Sidebar = () => {
@@ -27,12 +34,13 @@ const Sidebar = () => {
         "hidden md:flex flex-col w-64 border-r bg-white h-screen fixed"
       )}
     >
-      <div className="p-4 border-b">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8">
-            <img src="/api/placeholder/32/32" alt="Logo" className="rounded" />
-          </div>
-          <span className="font-semibold">100xBrainly</span>
+      <div className="p-4 mt-4">
+        <div className="text-center">
+          <Link to="/Home">
+            <span className="text-center text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              100xBrainly
+            </span>
+          </Link>
         </div>
       </div>
       <nav className="flex-1 p-4">

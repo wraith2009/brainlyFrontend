@@ -5,12 +5,16 @@ import SignUpPageComponent from "./components/(auth)/SignUp";
 import HomePageComponent from "./components/Dashboard/HomePage";
 
 import Sidebar from "./lib/utils";
+import TweetPageComponent from "./components/Dashboard/TweetPage";
+import VideoPageComponent from "./components/Dashboard/VideoPage";
+import DocumentPageComponent from "./components/Dashboard/DocumentPage";
+import LinkPageComponent from "./components/Dashboard/LinkPage";
 
 const Layout = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <main className="flex-1 md:ml-64 p-6">
+      <main className="flex-1 md:ml-64">
         <Outlet />
       </main>
     </div>
@@ -37,6 +41,22 @@ const appRouting = createBrowserRouter([
       {
         path: "/Home",
         element: <HomePageComponent />,
+      },
+      {
+        path: "/Home/tweets",
+        element: <TweetPageComponent />,
+      },
+      {
+        path: "/Home/videos",
+        element: <VideoPageComponent />,
+      },
+      {
+        path: "/Home/documents",
+        element: <DocumentPageComponent />,
+      },
+      {
+        path: "/Home/links",
+        element: <LinkPageComponent />,
       },
     ],
   },
