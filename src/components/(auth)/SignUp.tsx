@@ -63,7 +63,6 @@ const SignUpPageComponent = () => {
                 digital experience. Create your free account today and unlock a
                 smarter way to organize your thoughts.
               </p>
-              {/* Benefits section */}
             </div>
 
             <div className="flex-1 w-full max-w-md">

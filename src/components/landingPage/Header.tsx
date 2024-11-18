@@ -61,13 +61,13 @@ const Header = () => {
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <a
-              href="/signin"
+              href="/Sign-in"
               className="px-4 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
               Sign In
             </a>
             <a
-              href="/register"
+              href="/Sign-up"
               className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
             >
               Register
