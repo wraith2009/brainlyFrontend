@@ -5,9 +5,12 @@ import CreateContentModal from "../ui/Contentmodal";
 import { useRecoilValue } from "recoil";
 import { UserIdState } from "../../recoil/atoms/auth.atom";
 import apiCall from "../../api/auth.api";
+import PopUpModal from "../ui/popupmodal";
+import { ContentState } from "../../recoil/atoms/content.atom";
+import { useRecoilState } from "recoil";
 
-interface ContentSchema {
-  id: string;
+export interface ContentSchema {
+  _id: string;
   title: string;
   content?: string;
   tags: string[];
@@ -15,57 +18,31 @@ interface ContentSchema {
   link?: string;
   type: string;
 }
+
 const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [contents, setContents] = useState<ContentSchema[]>([
-    {
-      id: "1",
-      title: "Project Ideas",
-      content:
-        "Future Projects\n- Build a personal knowledge base\n- Create a habit tracker\n- Design a minimalist todo app",
-      tags: ["productivity", "ideas"],
-      dateAdded: "10/03/2024",
-      link: "#",
-      type: "note",
-    },
-    {
-      id: "2",
-      title: "How to Build a Second Brain",
-      content: "",
-      tags: ["productivity", "learning"],
-      dateAdded: "09/03/2024",
-      link: "#",
-      type: "note",
-    },
-    {
-      id: "3",
-      title: "Productivity Tip",
-      content:
-        "The best way to learn is to build in public. Share your progress, get feedback, and help others along the way.",
-      tags: ["productivity", "learning"],
-      dateAdded: "08/03/2024",
-      link: "#",
-      type: "note",
-    },
-  ]);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
+  const [globalContent, setGlobalContent] = useRecoilState(ContentState);
   const UserId = useRecoilValue(UserIdState);
 
   const fetchUserContent = async () => {
     try {
       const response = await apiCall("/get-content", { userId: UserId });
-      console.log("response on homepage", response);
-      setContents(response.content);
+      setGlobalContent(response.content);
     } catch (error) {
       console.error(error);
     }
   };
 
+  console.log("using recoil state", globalContent);
   useEffect(() => {
     fetchUserContent();
   }, []);
+
   const handleSubmitContent = (newContent: any) => {
-    setContents((prev) => [
+    setGlobalContent((prev) => [
       {
         ...newContent,
         dateAdded: new Date().toLocaleDateString(),
@@ -74,8 +51,42 @@ const App: React.FC = () => {
     ]);
   };
 
+  const handleDeleteClick = (cardId: string) => {
+    setSelectedCardId(cardId);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    console.log("Delete card:", selectedCardId);
+    if (selectedCardId) {
+      console.log("Deleting content with id:", selectedCardId);
+      try {
+        const response = await apiCall("/delete-content", {
+          contentId: selectedCardId,
+        });
+
+        console.log(response);
+
+        if (response) {
+          setGlobalContent((prevContents) =>
+            prevContents.filter((content) => content._id !== selectedCardId)
+          );
+
+          setDeleteModalOpen(false);
+          setSelectedCardId(null);
+        }
+      } catch (error) {
+        console.error("Error deleting content:", error);
+      }
+    }
+  };
+
+  const selectedCardTitle = globalContent.find(
+    (content) => content._id === selectedCardId
+  )?.title;
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-100 p-6">
       <header className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">All Notes</h1>
         <div className="flex gap-4">
@@ -100,16 +111,33 @@ const App: React.FC = () => {
       />
 
       <div className="flex gap-6 flex-wrap">
-        {contents.map((card) => (
+        {globalContent.map((card) => (
           <Card
-            key={card.id}
+            key={card._id}
             title={card.title}
             content={card.content}
-            tags={card.tags}
-            dateAdded={card.dateAdded}
+            tags={card.tags || []}
+            link={card.link}
+            dateAdded={
+              card.dateAdded
+                ? new Date(card.dateAdded).toLocaleDateString()
+                : ""
+            }
+            onDeleteClick={() => card._id && handleDeleteClick(card._id)}
           />
         ))}
       </div>
+
+      <PopUpModal
+        isOpen={isDeleteModalOpen}
+        title="Confirm Delete"
+        content={`Are you sure you want to delete "${selectedCardTitle}"?`}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setSelectedCardId(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 };

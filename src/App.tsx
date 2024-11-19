@@ -5,10 +5,7 @@ import SignUpPageComponent from "./components/(auth)/SignUp";
 import HomePageComponent from "./components/Dashboard/HomePage";
 
 import Sidebar from "./lib/utils";
-import TweetPageComponent from "./components/Dashboard/TweetPage";
-import VideoPageComponent from "./components/Dashboard/VideoPage";
-import DocumentPageComponent from "./components/Dashboard/DocumentPage";
-import LinkPageComponent from "./components/Dashboard/LinkPage";
+import TagPage from "./components/ui/filteredTagComponent";
 
 const Layout = () => {
   return (
@@ -44,19 +41,19 @@ const appRouting = createBrowserRouter([
       },
       {
         path: "/Home/tweets",
-        element: <TweetPageComponent />,
+        element: <TagPage tag="Tweet" />,
       },
       {
         path: "/Home/videos",
-        element: <VideoPageComponent />,
+        element: <TagPage tag="Video" />,
       },
       {
         path: "/Home/documents",
-        element: <DocumentPageComponent />,
+        element: <TagPage tag="Document" />,
       },
       {
         path: "/Home/links",
-        element: <LinkPageComponent />,
+        element: <TagPage tag="Link" />,
       },
     ],
   },

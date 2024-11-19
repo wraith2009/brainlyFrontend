@@ -7,4 +7,8 @@ export const ContentSchema = z.object({
   userId: z.string().optional(),
   content: z.string().optional(),
   link: z.string().optional(),
+  _id: z.string().optional(),
+  dateAdded: z.date().optional(),
 });
+
+export type ContentSchemaType = z.infer<typeof ContentSchema>;
