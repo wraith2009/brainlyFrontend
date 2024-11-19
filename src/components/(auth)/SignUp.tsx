@@ -32,8 +32,6 @@ const SignUpPageComponent = () => {
     try {
       const response = await apiCall("/Signup", data);
 
-      console.log(response);
-
       if (response) {
         navigate("/Sign-in");
       }

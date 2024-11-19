@@ -61,15 +61,11 @@ const App: React.FC = () => {
   };
 
   const handleDeleteConfirm = async () => {
-    console.log("Delete card:", selectedCardId);
     if (selectedCardId) {
-      console.log("Deleting content with id:", selectedCardId);
       try {
         const response = await apiCall("/delete-content", {
           contentId: selectedCardId,
         });
-
-        console.log(response);
 
         if (response) {
           setGlobalContent((prevContents) =>
