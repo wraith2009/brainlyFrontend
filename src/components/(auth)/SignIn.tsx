@@ -4,6 +4,8 @@ import Header from "../landingPage/Header";
 import Footer from "../landingPage/Footer";
 import apiCall from "../../api/auth.api";
 import { AuthSchema } from "../../config/validators/auth.validator";
+import { useSetRecoilState } from "recoil";
+import { UserIdState } from "../../recoil/atoms/auth.atom";
 
 const SignInPageComponent = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +23,7 @@ const SignInPageComponent = () => {
       [name]: value,
     }));
   };
+  const setUserId = useSetRecoilState(UserIdState);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -52,7 +55,7 @@ const SignInPageComponent = () => {
       console.log(response);
       if (response.token) {
         localStorage.setItem("token", response.token);
-
+        setUserId(response.user._id);
         navigate("/Home");
       } else {
         setError("Failed to sign in. Please try again.");

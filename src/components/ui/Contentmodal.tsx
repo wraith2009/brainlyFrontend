@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Plus, X, Tag } from "lucide-react";
+import { X, Tag } from "lucide-react";
+import { useRecoilValue } from "recoil";
+import { UserIdState } from "../../recoil/atoms/auth.atom";
+import apiCall from "../../api/auth.api";
+import { ContentSchema } from "../../config/validators/content.validator";
 
-const CONTENT_TYPES = ["Video", "tweet", "Link", "Document"] as const;
+const CONTENT_TYPES = ["Video", "Tweet", "Link", "Document"] as const;
 
 interface CreateContentModalProps {
   isOpen: boolean;
@@ -35,6 +39,8 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
   });
 
   const [currentTag, setCurrentTag] = useState("");
+  const userId = useRecoilValue(UserIdState);
+  console.log("userId" + userId);
 
   const handleAddTag = () => {
     if (currentTag && !newContent.tags.includes(currentTag)) {
@@ -53,10 +59,35 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
     }));
   };
 
-  const handleSubmitContent = () => {
+  const handleSubmitContent = async () => {
     if (!newContent.title) return;
 
+    const isValidContent = ContentSchema.safeParse({
+      title: newContent.title,
+      type: newContent.type,
+      tags: newContent.tags,
+      userId,
+      content: newContent.content,
+      link: newContent.link,
+    });
+
+    if (!isValidContent.success) {
+      console.error(isValidContent.error);
+      return;
+    }
+
     onSubmit(newContent);
+    try {
+      const response = await apiCall("/create-content", {
+        ...newContent,
+        userId,
+      });
+
+      console.log(response);
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
 
     setNewContent({
       title: "",
@@ -97,7 +128,7 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
                   title: e.target.value,
                 }))
               }
-              className="w-full border p-2 rounded-3xl"
+              className="w-full border p-2 rounded-lg"
               placeholder="Enter content title"
             />
           </div>
@@ -112,7 +143,7 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
                   type: e.target.value as (typeof CONTENT_TYPES)[number],
                 }))
               }
-              className="w-full border p-2 rounded-3xl"
+              className="w-full border p-2 rounded-lg"
             >
               {CONTENT_TYPES.map((type) => (
                 <option key={type} value={type}>
@@ -133,7 +164,7 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
                   link: e.target.value,
                 }))
               }
-              className="w-full border p-2 rounded-3xl"
+              className="w-full border p-2 rounded-lg"
               placeholder="Enter URL"
             />
           </div>
@@ -145,7 +176,7 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
                 type="text"
                 value={currentTag}
                 onChange={(e) => setCurrentTag(e.target.value)}
-                className="flex-grow border p-2 rounded-3xl"
+                className="flex-grow border p-2 rounded-lg"
                 placeholder="Add a tag"
                 onKeyDown={(e) => e.key === "Enter" && handleAddTag()}
               />
@@ -190,14 +221,14 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
           <div className="flex justify-end space-x-2">
             <button
               onClick={onClose}
-              className="border p-2 rounded-3xl hover:bg-gray-100"
+              className="border p-2 rounded-lg hover:bg-gray-100"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmitContent}
               disabled={!newContent.title}
-              className="bg-blue-500 text-white p-2 rounded-3xl hover:bg-blue-600 disabled:opacity-50"
+              className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
             >
               Create Content
             </button>

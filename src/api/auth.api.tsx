@@ -6,6 +6,7 @@ const apiCall = async (
   data: Record<string, any> = {},
   method: string = "POST"
 ) => {
+  console.log("API call:", method, url, data);
   try {
     const response = await axios({
       method,
