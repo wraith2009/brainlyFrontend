@@ -3,9 +3,13 @@ import LandingPageComponent from "./components/landingPage/LandingPage";
 import SignInPageComponent from "./components/(auth)/SignIn";
 import SignUpPageComponent from "./components/(auth)/SignUp";
 import HomePageComponent from "./components/Dashboard/HomePage";
-
+import SharedPageComponent from "./components/sharablePage/page";
 import Sidebar from "./lib/utils";
 import TagPage from "./components/ui/filteredTagComponent";
+import PricingPage from "./components/(navbarpages)/Pricing";
+import BlogPage from "./components/(navbarpages)/Blog";
+import UpcomingAIPage from "./components/(navbarpages)/Upcoming";
+import FeaturesPage from "./components/(navbarpages)/Feature";
 
 const Layout = () => {
   return (
@@ -30,6 +34,26 @@ const appRouting = createBrowserRouter([
   {
     path: "/Sign-up",
     element: <SignUpPageComponent />,
+  },
+  {
+    path: "pricing",
+    element: <PricingPage />,
+  },
+  {
+    path: "/blog",
+    element: <BlogPage />,
+  },
+  {
+    path: "/features",
+    element: <FeaturesPage />,
+  },
+  {
+    path: "/upcoming",
+    element: <UpcomingAIPage />,
+  },
+  {
+    path: "/sharable-link/:id",
+    element: <SharedPageComponent />,
   },
   {
     path: "/Home",

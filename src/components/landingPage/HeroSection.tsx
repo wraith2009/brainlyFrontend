@@ -1,4 +1,5 @@
 import { Search, BookMarked, BrainCircuit } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -19,9 +20,11 @@ const Hero = () => {
             </p>
 
             <div className="mt-10">
-              <button className="px-4 py-2 rounded-3xl bg-blue-600 text-white hover:bg-blue-700 transition-colors text-lg font-semibold">
-                Get Started - It's Free
-              </button>
+              <Link to="/Sign-up">
+                <button className="px-4 py-2 rounded-3xl bg-blue-600 text-white hover:bg-blue-700 transition-colors text-lg font-semibold">
+                  Get Started - It's Free
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -34,7 +37,7 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1  text-center md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           <div className="flex flex-col items-center p-6 rounded-xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <Search size={32} className="text-blue-600 mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-gray-900">
@@ -45,15 +48,17 @@ const Hero = () => {
             </p>
           </div>
 
-          <div className="flex flex-col items-center p-6 rounded-xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-col text-center items-center p-6 rounded-xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <BookMarked size={32} className="text-blue-600 mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-gray-900">
               Smart Organization
             </h3>
-            <p className="text-gray-600">Auto-categorize your content</p>
+            <p className="text-gray-600 text-center">
+              Auto-categorize your content
+            </p>
           </div>
 
-          <div className="flex flex-col items-center p-6 rounded-xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-col  text-center items-center p-6 rounded-xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <BrainCircuit size={32} className="text-blue-600 mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-gray-900">
               AI-Powered
@@ -65,7 +70,7 @@ const Hero = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-center text-gray-500 mb-4">
             Trusted by thousands of users worldwide
           </p>
           <div className="flex flex-wrap justify-center gap-8 opacity-70">

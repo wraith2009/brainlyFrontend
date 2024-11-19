@@ -1,4 +1,5 @@
 import { Rocket } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -23,10 +24,12 @@ const CTA = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="px-4 py-2 rounded-3xl bg-blue-600 text-white hover:bg-blue-700 transition-colors text-lg font-semibold flex items-center justify-center gap-2">
-                <Rocket size={20} />
-                Get Started Free
-              </button>
+              <Link to="/Sign-up">
+                <button className="px-4 py-2 rounded-3xl bg-blue-600 text-white hover:bg-blue-700 transition-colors text-lg font-semibold flex items-center justify-center gap-2">
+                  <Rocket size={20} />
+                  Get Started Free
+                </button>
+              </Link>
             </div>
           </div>
         </div>

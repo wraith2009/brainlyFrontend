@@ -20,10 +20,11 @@ export interface ContentSchema {
 }
 
 const App: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-
+  const [sharableLink, setSharableLink] = useState<string | null>(null);
   const [globalContent, setGlobalContent] = useRecoilState(ContentState);
   const UserId = useRecoilValue(UserIdState);
 
@@ -36,7 +37,6 @@ const App: React.FC = () => {
     }
   };
 
-  console.log("using recoil state", globalContent);
   useEffect(() => {
     fetchUserContent();
   }, []);
@@ -54,6 +54,10 @@ const App: React.FC = () => {
   const handleDeleteClick = (cardId: string) => {
     setSelectedCardId(cardId);
     setDeleteModalOpen(true);
+  };
+
+  const handleClickOnShareModal = () => {
+    setIsShareModalOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
@@ -81,6 +85,35 @@ const App: React.FC = () => {
     }
   };
 
+  const handleShareContent = async () => {
+    try {
+      const response = await apiCall("/create-link", {
+        userId: UserId,
+      });
+
+      if (response.token) {
+        const generatedLink = `http://localhost:5173/sharable-link/${response.token}`;
+
+        setSharableLink(generatedLink);
+      }
+    } catch (error) {
+      console.error("error generating link", error);
+    }
+  };
+
+  const handleCopyLink = () => {
+    if (sharableLink) {
+      navigator.clipboard
+        .writeText(sharableLink)
+        .then(() => {
+          alert("Link copied to clipboard!");
+        })
+        .catch((err) => {
+          console.error("Failed to copy link: ", err);
+        });
+    }
+  };
+
   const selectedCardTitle = globalContent.find(
     (content) => content._id === selectedCardId
   )?.title;
@@ -90,7 +123,10 @@ const App: React.FC = () => {
       <header className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">All Notes</h1>
         <div className="flex gap-4">
-          <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2">
+          <button
+            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center gap-2"
+            onClick={handleClickOnShareModal}
+          >
             <Share2 className="w-5 h-5" />
             Share Brain
           </button>
@@ -138,6 +174,26 @@ const App: React.FC = () => {
         }}
         onConfirm={handleDeleteConfirm}
       />
+
+      {isShareModalOpen && (
+        <PopUpModal
+          isOpen={isShareModalOpen}
+          title="Share Content"
+          content="Are you sure you want to share Your Secound Brain?"
+          onClose={() => setIsShareModalOpen(false)}
+          onConfirm={handleShareContent}
+        />
+      )}
+
+      {sharableLink && (
+        <PopUpModal
+          isOpen={!!sharableLink}
+          title="Sharable Link Ready"
+          content="Your sharable link is now available!"
+          onClose={() => setSharableLink(null)}
+          onConfirm={handleCopyLink}
+        />
+      )}
     </div>
   );
 };
