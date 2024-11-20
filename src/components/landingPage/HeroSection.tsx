@@ -30,7 +30,7 @@ const Hero = () => {
 
           <div className="hidden lg:block w-[45%] h-[500px] relative -mt-28">
             <img
-              src="/public/LandingPage.png"
+              src="/LandingPage.png"
               alt="Digital organization illustration"
               className="w-full h-full object-contain"
             />
