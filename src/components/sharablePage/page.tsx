@@ -69,6 +69,7 @@ const SharedPageComponent: React.FC = () => {
               dateAdded={card.dateAdded}
               link={card.link}
               onDeleteClick={() => {}}
+              onUpdateClick={() => {}}
             />
           ))}
         </div>

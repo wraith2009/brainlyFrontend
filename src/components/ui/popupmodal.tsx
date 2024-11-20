@@ -18,7 +18,6 @@ const PopUpModal: React.FC<PopUpModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
-  // Close modal when clicking outside
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -31,7 +30,6 @@ const PopUpModal: React.FC<PopUpModalProps> = ({
       onClick={handleBackdropClick}
     >
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 relative animate-in fade-in zoom-in duration-200">
-        {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
           <button
@@ -42,10 +40,8 @@ const PopUpModal: React.FC<PopUpModalProps> = ({
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-6">{content}</div>
 
-        {/* Footer */}
         {onConfirm && (
           <div className="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50 rounded-b-lg">
             <button

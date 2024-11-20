@@ -14,7 +14,7 @@ export interface ContentSchema {
   title: string;
   content?: string;
   tags: string[];
-  dateAdded: string;
+  dateAdded: Date;
   link?: string;
   type: string;
 }
@@ -27,6 +27,8 @@ const App: React.FC = () => {
   const [sharableLink, setSharableLink] = useState<string | null>(null);
   const [globalContent, setGlobalContent] = useRecoilState(ContentState);
   const UserId = useRecoilValue(UserIdState);
+  const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false);
+  const [updateData, setUpdateData] = useState<ContentSchema | null>(null);
 
   const fetchUserContent = async () => {
     try {
@@ -89,7 +91,6 @@ const App: React.FC = () => {
 
       if (response.token) {
         const generatedLink = `http://localhost:5173/sharable-link/${response.token}`;
-
         setSharableLink(generatedLink);
       }
     } catch (error) {
@@ -107,6 +108,42 @@ const App: React.FC = () => {
         .catch((err) => {
           console.error("Failed to copy link: ", err);
         });
+    }
+  };
+
+  const handleUpdateClick = (card: ContentSchema) => {
+    setUpdateData(card);
+    setIsModalUpdate(true);
+  };
+
+  const handleUpdateContentSubmit = async (
+    updatedContent: Partial<ContentSchema>
+  ) => {
+    if (updateData?._id) {
+      try {
+        const response = await apiCall("/update-content", {
+          contentId: updateData._id,
+          updates: updatedContent,
+        });
+
+        if (response) {
+          setGlobalContent((prevContent) =>
+            prevContent.map((content) =>
+              content._id === updateData._id
+                ? {
+                    ...content,
+                    ...updatedContent,
+                    dateAdded: new Date(),
+                  }
+                : content
+            )
+          );
+        }
+        setIsModalUpdate(false);
+        setUpdateData(null);
+      } catch (error) {
+        console.error("Error updating content:", error);
+      }
     }
   };
 
@@ -156,6 +193,9 @@ const App: React.FC = () => {
                 : ""
             }
             onDeleteClick={() => card._id && handleDeleteClick(card._id)}
+            onUpdateClick={() =>
+              card._id && handleUpdateClick(card as ContentSchema)
+            }
           />
         ))}
       </div>
@@ -175,7 +215,7 @@ const App: React.FC = () => {
         <PopUpModal
           isOpen={isShareModalOpen}
           title="Share Content"
-          content="Are you sure you want to share Your Secound Brain?"
+          content="Are you sure you want to share Your Second Brain?"
           onClose={() => setIsShareModalOpen(false)}
           onConfirm={handleShareContent}
         />
@@ -188,6 +228,25 @@ const App: React.FC = () => {
           content="Your sharable link is now available!"
           onClose={() => setSharableLink(null)}
           onConfirm={handleCopyLink}
+        />
+      )}
+
+      {isModalUpdate && updateData && (
+        <CreateContentModal
+          isOpen={true}
+          onClose={() => {
+            setIsModalUpdate(false);
+            setUpdateData(null);
+          }}
+          onSubmit={handleUpdateContentSubmit}
+          initialData={{
+            _id: updateData._id || "",
+            title: updateData.title,
+            content: updateData.content || "",
+            tags: updateData.tags || [],
+            link: updateData.link,
+            type: updateData.type as "Tweet" | "Video" | "Link" | "Document",
+          }}
         />
       )}
     </div>

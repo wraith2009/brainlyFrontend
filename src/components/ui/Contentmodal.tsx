@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Tag } from "lucide-react";
 import { useRecoilValue } from "recoil";
 import { UserIdState } from "../../recoil/atoms/auth.atom";
-import apiCall from "../../api/auth.api";
 import { ContentSchema } from "../../config/validators/content.validator";
+import apiCall from "../../api/auth.api";
 
 const CONTENT_TYPES = ["Video", "Tweet", "Link", "Document"] as const;
 
-interface CreateContentModalProps {
+interface ContentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (content: {
@@ -17,12 +17,21 @@ interface CreateContentModalProps {
     tags: string[];
     content?: string;
   }) => void;
+  initialData?: {
+    _id: string;
+    title: string;
+    type: (typeof CONTENT_TYPES)[number];
+    link?: string;
+    tags: string[];
+    content?: string;
+  };
 }
 
-const CreateContentModal: React.FC<CreateContentModalProps> = ({
+const ContentModal: React.FC<ContentModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  initialData,
 }) => {
   const [newContent, setNewContent] = useState<{
     title: string;
@@ -40,7 +49,27 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
 
   const [currentTag, setCurrentTag] = useState("");
   const userId = useRecoilValue(UserIdState);
-  console.log("userId" + userId);
+  const isUpdateMode = !!initialData;
+
+  useEffect(() => {
+    if (initialData) {
+      setNewContent({
+        title: initialData.title || "",
+        type: initialData.type || CONTENT_TYPES[0],
+        link: initialData.link || "",
+        tags: initialData.tags || [],
+        content: initialData.content || "",
+      });
+    } else {
+      setNewContent({
+        title: "",
+        type: CONTENT_TYPES[0],
+        link: "",
+        tags: [],
+        content: "",
+      });
+    }
+  }, [initialData, isOpen]);
 
   const handleAddTag = () => {
     if (currentTag && !newContent.tags.includes(currentTag)) {
@@ -59,44 +88,49 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
     }));
   };
 
-  const handleSubmitContent = async () => {
+  const handleSubmit = async () => {
     if (!newContent.title) return;
 
-    const isValidContent = ContentSchema.safeParse({
+    const contentData = {
       title: newContent.title,
       type: newContent.type,
       tags: newContent.tags,
       userId,
-      content: newContent.content,
-      link: newContent.link,
-    });
+      content: newContent.content || undefined,
+      link: newContent.link || undefined,
+    };
+
+    const isValidContent = ContentSchema.safeParse(contentData);
 
     if (!isValidContent.success) {
       console.error(isValidContent.error);
       return;
     }
 
-    onSubmit(newContent);
     try {
-      const response = await apiCall("/create-content", {
-        ...newContent,
-        userId,
-      });
+      if (isUpdateMode) {
+        // Handle update
+        const response = await apiCall("/update-content", {
+          ...contentData,
+          contentId: initialData._id, // Assuming initialData has _id
+        });
 
-      console.log(response);
-      onClose();
+        if (response) {
+          onSubmit(newContent);
+          onClose();
+        }
+      } else {
+        // Handle create
+        const response = await apiCall("/create-content", contentData);
+
+        if (response) {
+          onSubmit(newContent);
+          onClose();
+        }
+      }
     } catch (error) {
       console.error(error);
     }
-
-    setNewContent({
-      title: "",
-      type: CONTENT_TYPES[0],
-      link: "",
-      tags: [],
-      content: "",
-    });
-    onClose();
   };
 
   if (!isOpen) return null;
@@ -105,8 +139,8 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg w-full max-w-md">
         <div className="flex justify-between items-center text-center mb-4">
-          <h2 className="text-xl text-[#676767]  font-semibold">
-            Create New Content
+          <h2 className="text-xl text-[#676767] font-semibold">
+            {isUpdateMode ? "Update Content" : "Create New Content"}
           </h2>
           <button
             onClick={onClose}
@@ -181,7 +215,7 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
                 onKeyDown={(e) => e.key === "Enter" && handleAddTag()}
               />
             </div>
-            <div className="flex flex-wrap  gap-2">
+            <div className="flex flex-wrap gap-2">
               {newContent.tags.map((tag) => (
                 <div
                   key={tag}
@@ -226,11 +260,11 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
               Cancel
             </button>
             <button
-              onClick={handleSubmitContent}
+              onClick={handleSubmit}
               disabled={!newContent.title}
               className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
             >
-              Create Content
+              {isUpdateMode ? "Update Content" : "Create Content"}
             </button>
           </div>
         </div>
@@ -239,4 +273,4 @@ const CreateContentModal: React.FC<CreateContentModalProps> = ({
   );
 };
 
-export default CreateContentModal;
+export default ContentModal;

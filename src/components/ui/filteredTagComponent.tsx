@@ -63,6 +63,9 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
             onDeleteClick={() =>
               content._id && DeleteContentClicked(content._id)
             }
+            onUpdateClick={() => {
+              // Add your update click handler logic here
+            }}
           />
         ))}
 

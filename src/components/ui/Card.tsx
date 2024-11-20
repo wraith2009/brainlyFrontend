@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileText, Share2, Trash2, Link as LinkIcon } from "lucide-react";
+import { FileText, Trash2, Link as LinkIcon, Pencil } from "lucide-react";
 
 interface CardProps {
   title: string;
@@ -8,6 +8,7 @@ interface CardProps {
   dateAdded: string;
   link?: string;
   onDeleteClick: () => void;
+  onUpdateClick: () => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -17,6 +18,7 @@ const Card: React.FC<CardProps> = ({
   dateAdded,
   link,
   onDeleteClick,
+  onUpdateClick,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -88,8 +90,11 @@ const Card: React.FC<CardProps> = ({
               <LinkIcon className="w-4 h-4 text-gray-600" />
             </a>
           )}
-          <button className="p-1 hover:bg-gray-100 rounded">
-            <Share2 className="w-4 h-4 text-gray-600" />
+          <button
+            className="p-1 hover:bg-gray-100 rounded"
+            onClick={onUpdateClick}
+          >
+            <Pencil className="w-4 h-4 text-gray-600" />
           </button>
           <button
             className="p-1 hover:bg-gray-100 rounded"
