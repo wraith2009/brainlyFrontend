@@ -49,6 +49,7 @@ const ContentModal: React.FC<ContentModalProps> = ({
 
   const [currentTag, setCurrentTag] = useState("");
   const userId = useRecoilValue(UserIdState);
+  const [suggestions, setSuggestions] = useState<string[]>(["Tag"]);
   const isUpdateMode = !!initialData;
 
   useEffect(() => {
@@ -109,10 +110,9 @@ const ContentModal: React.FC<ContentModalProps> = ({
 
     try {
       if (isUpdateMode) {
-        // Handle update
         const response = await apiCall("/update-content", {
           ...contentData,
-          contentId: initialData._id, // Assuming initialData has _id
+          contentId: initialData._id,
         });
 
         if (response) {
@@ -120,7 +120,6 @@ const ContentModal: React.FC<ContentModalProps> = ({
           onClose();
         }
       } else {
-        // Handle create
         const response = await apiCall("/create-content", contentData);
 
         if (response) {
@@ -132,6 +131,21 @@ const ContentModal: React.FC<ContentModalProps> = ({
       console.error(error);
     }
   };
+
+  const fetchTags = async () => {
+    const response = await apiCall("/getTags", {}, "GET");
+
+    if (response) {
+      setSuggestions(response.data.map((obj: { title: string }) => obj.title));
+    }
+    console.log(response);
+  };
+
+  useEffect(() => {
+    fetchTags();
+  }, []);
+
+  console.log("in content modal", suggestions);
 
   if (!isOpen) return null;
 
@@ -205,7 +219,7 @@ const ContentModal: React.FC<ContentModalProps> = ({
 
           <div>
             <label className="block text-[#676767] mb-2">Tags</label>
-            <div className="flex space-x-2 mb-2">
+            <div className="relative flex space-x-2 mb-2">
               <input
                 type="text"
                 value={currentTag}
@@ -214,6 +228,29 @@ const ContentModal: React.FC<ContentModalProps> = ({
                 placeholder="Add a tag"
                 onKeyDown={(e) => e.key === "Enter" && handleAddTag()}
               />
+              {currentTag && (
+                <ul className="absolute mt-10 mr-4 z-10 w-full bg-white border border-gray-300 rounded-md max-h-40 overflow-auto">
+                  {suggestions
+                    ?.filter((tag) =>
+                      tag.toLowerCase().startsWith(currentTag.toLowerCase())
+                    )
+                    .map((tag, index) => (
+                      <li
+                        key={index}
+                        onClick={() => {
+                          setNewContent((prev) => ({
+                            ...prev,
+                            tags: [...prev.tags, tag],
+                          }));
+                          setCurrentTag("");
+                        }}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                      >
+                        {tag}
+                      </li>
+                    ))}
+                </ul>
+              )}
             </div>
             <div className="flex flex-wrap gap-2">
               {newContent.tags.map((tag) => (

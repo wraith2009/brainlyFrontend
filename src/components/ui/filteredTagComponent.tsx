@@ -140,6 +140,7 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
             setSelectedCardId(null);
           }}
           onConfirm={handleDeleteConfirm}
+          ButtonText="Confirm Delete"
         />
 
         {isEditModalOpen && editedCard && (

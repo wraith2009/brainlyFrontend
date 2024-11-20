@@ -8,7 +8,6 @@ import apiCall from "../../api/auth.api";
 import PopUpModal from "../ui/popupmodal";
 import { ContentState } from "../../recoil/atoms/content.atom";
 import { useRecoilState } from "recoil";
-import { useNavigate } from "react-router-dom";
 
 export interface ContentSchema {
   _id: string;
@@ -30,7 +29,6 @@ const App: React.FC = () => {
   const UserId = useRecoilValue(UserIdState);
   const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false);
   const [updateData, setUpdateData] = useState<ContentSchema | null>(null);
-  const navigate = useNavigate();
 
   const fetchUserContent = async () => {
     try {
@@ -38,7 +36,6 @@ const App: React.FC = () => {
       setGlobalContent(response.content);
     } catch (error) {
       console.error(error);
-      navigate("/login");
     }
   };
 
@@ -192,7 +189,7 @@ const App: React.FC = () => {
             link={card.link}
             dateAdded={
               card.updatedAt
-                ? new Date(card.updatedAt!).toLocaleDateString()
+                ? new Date(card.updatedAt).toLocaleDateString()
                 : ""
             }
             onDeleteClick={() => card._id && handleDeleteClick(card._id)}
@@ -212,6 +209,7 @@ const App: React.FC = () => {
           setSelectedCardId(null);
         }}
         onConfirm={handleDeleteConfirm}
+        ButtonText="Confirm Delete"
       />
 
       {isShareModalOpen && (
@@ -221,6 +219,7 @@ const App: React.FC = () => {
           content="Are you sure you want to share Your Second Brain?"
           onClose={() => setIsShareModalOpen(false)}
           onConfirm={handleShareContent}
+          ButtonText="Yes, Share !"
         />
       )}
 
@@ -231,6 +230,7 @@ const App: React.FC = () => {
           content="Your sharable link is now available!"
           onClose={() => setSharableLink(null)}
           onConfirm={handleCopyLink}
+          ButtonText="Copy Link"
         />
       )}
 

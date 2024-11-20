@@ -22,12 +22,6 @@ const apiCall = async (
     return response.data;
   } catch (error) {
     console.error("API call failed:", error);
-
-    if (axios.isAxiosError(error)) {
-      throw error.response?.data || { message: "An error occurred" };
-    } else {
-      throw { message: "An error occurred" };
-    }
   }
 };
 
