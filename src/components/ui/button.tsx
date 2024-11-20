@@ -12,8 +12,8 @@ const Button: React.FC<ButtonProps> = ({
   label,
   onClick,
   icon,
-  bgColor = "bg-indigo-600", // Default background color
-  textColor = "text-white", // Default text color
+  bgColor = "bg-indigo-600",
+  textColor = "text-white",
 }) => {
   return (
     <button

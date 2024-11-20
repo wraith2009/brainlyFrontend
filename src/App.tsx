@@ -1,25 +1,15 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LandingPageComponent from "./components/landingPage/LandingPage";
 import SignInPageComponent from "./components/(auth)/SignIn";
 import SignUpPageComponent from "./components/(auth)/SignUp";
 import HomePageComponent from "./components/Dashboard/HomePage";
-
-import Sidebar from "./lib/utils";
-import TweetPageComponent from "./components/Dashboard/TweetPage";
-import VideoPageComponent from "./components/Dashboard/VideoPage";
-import DocumentPageComponent from "./components/Dashboard/DocumentPage";
-import LinkPageComponent from "./components/Dashboard/LinkPage";
-
-const Layout = () => {
-  return (
-    <div className="flex">
-      <Sidebar />
-      <main className="flex-1 md:ml-64">
-        <Outlet />
-      </main>
-    </div>
-  );
-};
+import SharedPageComponent from "./components/sharablePage/page";
+import TagPage from "./components/ui/filteredTagComponent";
+import PricingPage from "./components/(navbarpages)/Pricing";
+import BlogPage from "./components/(navbarpages)/Blog";
+import UpcomingAIPage from "./components/(navbarpages)/Upcoming";
+import FeaturesPage from "./components/(navbarpages)/Feature";
+import Layout from "./config/layout";
 
 const appRouting = createBrowserRouter([
   {
@@ -35,6 +25,26 @@ const appRouting = createBrowserRouter([
     element: <SignUpPageComponent />,
   },
   {
+    path: "pricing",
+    element: <PricingPage />,
+  },
+  {
+    path: "/blog",
+    element: <BlogPage />,
+  },
+  {
+    path: "/features",
+    element: <FeaturesPage />,
+  },
+  {
+    path: "/upcoming",
+    element: <UpcomingAIPage />,
+  },
+  {
+    path: "/sharable-link/:id",
+    element: <SharedPageComponent />,
+  },
+  {
     path: "/Home",
     element: <Layout />,
     children: [
@@ -44,19 +54,19 @@ const appRouting = createBrowserRouter([
       },
       {
         path: "/Home/tweets",
-        element: <TweetPageComponent />,
+        element: <TagPage tag="Tweet" />,
       },
       {
         path: "/Home/videos",
-        element: <VideoPageComponent />,
+        element: <TagPage tag="Video" />,
       },
       {
         path: "/Home/documents",
-        element: <DocumentPageComponent />,
+        element: <TagPage tag="Document" />,
       },
       {
         path: "/Home/links",
-        element: <LinkPageComponent />,
+        element: <TagPage tag="Link" />,
       },
     ],
   },

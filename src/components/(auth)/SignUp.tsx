@@ -32,8 +32,6 @@ const SignUpPageComponent = () => {
     try {
       const response = await apiCall("/Signup", data);
 
-      console.log(response);
-
       if (response) {
         navigate("/Sign-in");
       }
@@ -132,12 +130,12 @@ const SignUpPageComponent = () => {
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600">
                     Already have an account?{" "}
-                    <a
-                      href="/Sign-in"
+                    <Link
+                      to="/Sign-in"
                       className="font-medium text-blue-600 hover:text-blue-500"
                     >
                       Sign In
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </div>

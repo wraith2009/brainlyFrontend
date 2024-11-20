@@ -52,7 +52,7 @@ const SignInPageComponent = () => {
 
     try {
       const response = await apiCall(url, data);
-      console.log(response);
+
       if (response.token) {
         localStorage.setItem("token", response.token);
         setUserId(response.user._id);
