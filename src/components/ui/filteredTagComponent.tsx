@@ -29,7 +29,7 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [editedCard, setEditedCard] = useState<ContentSchema | null>(null);
-  const [globalContent, setGlobalContent] = useRecoilState(ContentState);
+  const [, setGlobalContent] = useRecoilState(ContentState);
   const navigate = useNavigate();
 
   if (!IsLogin) {
@@ -118,9 +118,7 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
             tags={content.tags || []}
             link={content.link}
             dateAdded={
-              content.dateAdded
-                ? new Date(content.dateAdded).toLocaleDateString()
-                : ""
+              content.dateAdded ? new Date(content.dateAdded) : new Date()
             }
             onDeleteClick={() =>
               content._id && DeleteContentClicked(content._id)

@@ -187,11 +187,7 @@ const App: React.FC = () => {
             content={card.content}
             tags={card.tags || []}
             link={card.link}
-            dateAdded={
-              card.updatedAt
-                ? new Date(card.updatedAt).toLocaleDateString()
-                : ""
-            }
+            dateAdded={card.dateAdded ? new Date(card.dateAdded) : new Date()}
             onDeleteClick={() => card._id && handleDeleteClick(card._id)}
             onUpdateClick={() =>
               card._id && handleUpdateClick(card as ContentSchema)

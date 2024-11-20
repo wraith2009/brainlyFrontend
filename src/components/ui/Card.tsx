@@ -5,7 +5,7 @@ interface CardProps {
   title: string;
   content: any;
   tags: string[];
-  dateAdded: string;
+  dateAdded: Date;
   link?: string;
   onDeleteClick: () => void;
   onUpdateClick: () => void;
@@ -156,7 +156,9 @@ const Card: React.FC<CardProps> = ({
         ))}
       </div>
 
-      <div className="mt-4 text-sm text-gray-500">Added on {dateAdded}</div>
+      <div className="mt-4 text-sm text-gray-500">
+        Added on {dateAdded.toLocaleDateString()}
+      </div>
     </div>
   );
 };

@@ -7,7 +7,7 @@ interface Data {
   title: string;
   content: string;
   tags: string[];
-  dateAdded: string;
+  dateAdded: Date;
   link?: string;
 }
 
