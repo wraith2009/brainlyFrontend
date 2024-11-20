@@ -4,15 +4,37 @@ import { FilteredContentByTag } from "../../recoil/selectors/content.selector";
 import Card from "../ui/Card";
 import PopUpModal from "./popupmodal";
 import apiCall from "../../api/auth.api";
+import { useRecoilState } from "recoil";
+import { ContentState } from "../../recoil/atoms/content.atom";
+import CreateContentModal from "./Contentmodal";
+import { useNavigate } from "react-router-dom";
+import { IsLogin } from "../../recoil/atoms/IsLogin";
 
 interface TagPageProps {
   tag: string;
 }
 
+interface ContentSchema {
+  _id: string;
+  title: string;
+  content?: string;
+  tags: string[];
+  dateAdded: Date;
+  link?: string;
+  type: string;
+}
 const TagPage: React.FC<TagPageProps> = ({ tag }) => {
   const filteredContent = useRecoilValue(FilteredContentByTag(tag));
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [editedCard, setEditedCard] = useState<ContentSchema | null>(null);
+  const [globalContent, setGlobalContent] = useRecoilState(ContentState);
+  const navigate = useNavigate();
+
+  if (!IsLogin) {
+    navigate("/");
+  }
 
   const DeleteContentClicked = (cardId: string) => {
     setSelectedCardId(cardId);
@@ -35,11 +57,51 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
         console.log(response);
 
         if (response) {
+          setGlobalContent((prevContents) =>
+            prevContents.filter((content) => content._id !== selectedCardId)
+          );
+
           setIsDeleteModalOpen(false);
           setSelectedCardId(null);
         }
       } catch (error) {
         console.error("Error deleting content:", error);
+      }
+    }
+  };
+
+  const handleUpdateClick = (card: ContentSchema) => {
+    setEditedCard(card);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateContentSubmit = async (
+    updatedContent: Partial<ContentSchema>
+  ) => {
+    if (editedCard?._id) {
+      try {
+        const response = await apiCall("/update-content", {
+          contentId: editedCard._id,
+          updates: updatedContent,
+        });
+
+        if (response) {
+          setGlobalContent((prevContent) =>
+            prevContent.map((content) =>
+              content._id === editedCard._id
+                ? {
+                    ...content,
+                    ...updatedContent,
+                    dateAdded: new Date(),
+                  }
+                : content
+            )
+          );
+        }
+        setIsEditModalOpen(false);
+        setEditedCard(null);
+      } catch (error) {
+        console.error("Error updating content:", error);
       }
     }
   };
@@ -64,7 +126,7 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
               content._id && DeleteContentClicked(content._id)
             }
             onUpdateClick={() => {
-              // Add your update click handler logic here
+              content._id && handleUpdateClick(content as ContentSchema);
             }}
           />
         ))}
@@ -79,6 +141,25 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
           }}
           onConfirm={handleDeleteConfirm}
         />
+
+        {isEditModalOpen && editedCard && (
+          <CreateContentModal
+            isOpen={true}
+            onClose={() => {
+              setIsEditModalOpen(false);
+              setEditedCard(null);
+            }}
+            onSubmit={handleUpdateContentSubmit}
+            initialData={{
+              _id: editedCard._id || "",
+              title: editedCard.title,
+              content: editedCard.content || "",
+              tags: editedCard.tags || [],
+              link: editedCard.link || "",
+              type: editedCard.type as "Tweet" | "Video" | "Link" | "Document",
+            }}
+          />
+        )}
       </div>
     </div>
   );

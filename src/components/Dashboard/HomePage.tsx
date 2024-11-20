@@ -8,13 +8,14 @@ import apiCall from "../../api/auth.api";
 import PopUpModal from "../ui/popupmodal";
 import { ContentState } from "../../recoil/atoms/content.atom";
 import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 export interface ContentSchema {
   _id: string;
   title: string;
   content?: string;
   tags: string[];
-  dateAdded: Date;
+  updatedAt: Date;
   link?: string;
   type: string;
 }
@@ -29,6 +30,7 @@ const App: React.FC = () => {
   const UserId = useRecoilValue(UserIdState);
   const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false);
   const [updateData, setUpdateData] = useState<ContentSchema | null>(null);
+  const navigate = useNavigate();
 
   const fetchUserContent = async () => {
     try {
@@ -36,6 +38,7 @@ const App: React.FC = () => {
       setGlobalContent(response.content);
     } catch (error) {
       console.error(error);
+      navigate("/login");
     }
   };
 
@@ -188,8 +191,8 @@ const App: React.FC = () => {
             tags={card.tags || []}
             link={card.link}
             dateAdded={
-              card.dateAdded
-                ? new Date(card.dateAdded).toLocaleDateString()
+              card.updatedAt
+                ? new Date(card.updatedAt!).toLocaleDateString()
                 : ""
             }
             onDeleteClick={() => card._id && handleDeleteClick(card._id)}
