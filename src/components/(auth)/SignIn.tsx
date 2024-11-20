@@ -56,7 +56,9 @@ const SignInPageComponent = () => {
       if (response.token) {
         localStorage.setItem("token", response.token);
         setUserId(response.user._id);
-        navigate("/Home");
+        setTimeout(() => {
+          navigate("/Home");
+        }, 1000);
       } else {
         setError("Failed to sign in. Please try again.");
       }

@@ -10,6 +10,7 @@ import BlogPage from "./components/(navbarpages)/Blog";
 import UpcomingAIPage from "./components/(navbarpages)/Upcoming";
 import FeaturesPage from "./components/(navbarpages)/Feature";
 import Layout from "./config/layout";
+import ProtectiveRoute from "./lib/ProtectiveRoute";
 
 const appRouting = createBrowserRouter([
   {
@@ -46,27 +47,54 @@ const appRouting = createBrowserRouter([
   },
   {
     path: "/Home",
-    element: <Layout />,
+
+    element: (
+      <ProtectiveRoute>
+        <Layout />
+      </ProtectiveRoute>
+    ),
     children: [
       {
         path: "/Home",
-        element: <HomePageComponent />,
+        element: (
+          <ProtectiveRoute>
+            <HomePageComponent />
+          </ProtectiveRoute>
+        ),
       },
       {
         path: "/Home/tweets",
-        element: <TagPage tag="Tweet" />,
+
+        element: (
+          <ProtectiveRoute>
+            <TagPage tag="Tweet" />
+          </ProtectiveRoute>
+        ),
       },
       {
         path: "/Home/videos",
-        element: <TagPage tag="Video" />,
+        element: (
+          <ProtectiveRoute>
+            <TagPage tag="Video" />
+          </ProtectiveRoute>
+        ),
       },
       {
         path: "/Home/documents",
-        element: <TagPage tag="Document" />,
+        element: (
+          <ProtectiveRoute>
+            <TagPage tag="Document" />
+          </ProtectiveRoute>
+        ),
       },
       {
         path: "/Home/links",
-        element: <TagPage tag="Link" />,
+
+        element: (
+          <ProtectiveRoute>
+            <TagPage tag="Link" />
+          </ProtectiveRoute>
+        ),
       },
     ],
   },
