@@ -20,17 +20,51 @@ const Card: React.FC<CardProps> = ({
   onDeleteClick,
   onUpdateClick,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isTitleExpanded, setIsTitleExpanded] = useState(false);
+  const [isContentExpanded, setIsContentExpanded] = useState(false);
+
+  const renderTitle = () => {
+    if (!isTitleExpanded && title.length > 30) {
+      return (
+        <div className="flex items-center">
+          <h3 className="font-semibold text-lg truncate">
+            {title.slice(0, 30)}...
+            <button
+              onClick={() => setIsTitleExpanded(true)}
+              className="text-blue-600 hover:text-blue-700 ml-1 font-medium text-sm"
+            >
+              More
+            </button>
+          </h3>
+        </div>
+      );
+    }
+    return (
+      <div className="flex items-center">
+        <h3 className="font-semibold text-lg">
+          {title}
+          {isTitleExpanded && (
+            <button
+              onClick={() => setIsTitleExpanded(false)}
+              className="text-blue-600 hover:text-blue-700 ml-1 font-medium text-sm"
+            >
+              Less
+            </button>
+          )}
+        </h3>
+      </div>
+    );
+  };
 
   const renderContent = () => {
     if (typeof content === "string") {
-      if (!isExpanded && content.length > 150) {
+      if (!isContentExpanded && content.length > 150) {
         return (
           <div>
             <p className="text-gray-600">
               {content.slice(0, 150)}...
               <button
-                onClick={() => setIsExpanded(true)}
+                onClick={() => setIsContentExpanded(true)}
                 className="text-blue-600 hover:text-blue-700 ml-1 font-medium"
               >
                 See more
@@ -43,7 +77,7 @@ const Card: React.FC<CardProps> = ({
     }
 
     if (Array.isArray(content)) {
-      const displayContent = isExpanded ? content : content.slice(0, 3);
+      const displayContent = isContentExpanded ? content : content.slice(0, 3);
       return (
         <div>
           <ul className="list-disc pl-5 text-gray-600 space-y-1">
@@ -51,9 +85,9 @@ const Card: React.FC<CardProps> = ({
               <li key={index}>{item}</li>
             ))}
           </ul>
-          {content.length > 3 && !isExpanded && (
+          {content.length > 3 && !isContentExpanded && (
             <button
-              onClick={() => setIsExpanded(true)}
+              onClick={() => setIsContentExpanded(true)}
               className="text-blue-600 hover:text-blue-700 mt-2 font-medium"
             >
               See more
@@ -69,16 +103,14 @@ const Card: React.FC<CardProps> = ({
   return (
     <div
       className={`bg-white rounded-lg p-6 shadow-sm w-80 ${
-        isExpanded ? "min-h-[384px]" : "h-96"
+        isContentExpanded ? "min-h-[384px]" : "h-96"
       } flex flex-col`}
     >
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center mb-4">
+        <div className="mr-4">
           <FileText className="w-5 h-5 text-gray-600" />
-          <h3 className="font-semibold text-lg truncate max-w-[200px]">
-            {title}
-          </h3>
         </div>
+        <div className="flex-grow">{renderTitle()}</div>
         <div className="flex gap-2">
           {link && (
             <a
@@ -107,9 +139,9 @@ const Card: React.FC<CardProps> = ({
 
       <div className="flex-grow overflow-auto">{renderContent()}</div>
 
-      {isExpanded && (
+      {isContentExpanded && (
         <button
-          onClick={() => setIsExpanded(false)}
+          onClick={() => setIsContentExpanded(false)}
           className="text-blue-600 hover:text-blue-700 mt-2 font-medium"
         >
           See less

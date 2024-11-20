@@ -177,7 +177,7 @@ const ContentModal: React.FC<ContentModalProps> = ({
                 }))
               }
               className="w-full border p-2 rounded-lg"
-              placeholder="Enter content title"
+              placeholder="15 Character limit on Title"
             />
           </div>
 
