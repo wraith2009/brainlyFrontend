@@ -7,7 +7,7 @@ interface Data {
   title: string;
   content: string;
   tags: string[];
-  dateAdded: Date;
+  updatedAt: Date;
   link?: string;
 }
 
@@ -66,7 +66,7 @@ const SharedPageComponent: React.FC = () => {
               title={card.title}
               content={card.content}
               tags={card.tags}
-              dateAdded={card.dateAdded}
+              dateAdded={card.updatedAt}
               link={card.link}
               onDeleteClick={() => {}}
               onUpdateClick={() => {}}
