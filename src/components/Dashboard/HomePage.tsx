@@ -32,6 +32,8 @@ const App: React.FC = () => {
   const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false);
   const [updateData, setUpdateData] = useState<ContentSchema | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [ShowButton, setShowButton] = useState<boolean>(true);
+
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -230,6 +232,8 @@ const App: React.FC = () => {
               tags={card.tags || []}
               link={card.link}
               dateAdded={card.updatedAt ? new Date(card.updatedAt) : new Date()}
+              ShowButton={ShowButton}
+              setShowButton={setShowButton}
               onDeleteClick={() => card._id && handleDeleteClick(card._id)}
               onUpdateClick={() =>
                 card._id && handleUpdateClick(card as ContentSchema)

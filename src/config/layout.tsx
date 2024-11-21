@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { cn } from "../lib/utils";
+import SearchComponent from "../components/search/SearchComponent";
 
 import { Twitter, Youtube, FileText, Link2, Menu, X } from "lucide-react";
 
@@ -24,6 +25,7 @@ const navItems = [
 ];
 const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(true);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -37,6 +39,13 @@ const Layout = () => {
             100xBrainly
           </span>
         </Link>
+        <div>
+          <SearchComponent
+            isSearchOpen={isSearchOpen}
+            setIsSearchOpen={setIsSearchOpen}
+          />
+        </div>
+
         <button onClick={toggleMobileMenu} className="p-2 focus:outline-none">
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -55,6 +64,13 @@ const Layout = () => {
               </span>
             </Link>
           </div>
+        </div>
+
+        <div className="mt-2">
+          <SearchComponent
+            isSearchOpen={isSearchOpen}
+            setIsSearchOpen={setIsSearchOpen}
+          />
         </div>
         <nav className="flex-1 p-4">
           {navItems.map((item, index) => (

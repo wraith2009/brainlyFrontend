@@ -17,7 +17,7 @@ const SharedPageComponent: React.FC = () => {
   const [data, setData] = useState<Data[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [ShowButton, setShowButton] = useState<boolean>(false);
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -68,6 +68,8 @@ const SharedPageComponent: React.FC = () => {
               content={card.content}
               tags={card.tags}
               dateAdded={card.updatedAt}
+              ShowButton={ShowButton}
+              setShowButton={setShowButton}
               link={card.link}
               onDeleteClick={() => {}}
               onUpdateClick={() => {}}

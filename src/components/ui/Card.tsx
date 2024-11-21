@@ -7,6 +7,8 @@ interface CardProps {
   tags: string[];
   dateAdded: Date;
   link?: string;
+  ShowButton?: boolean;
+  setShowButton?: (isOpen: boolean) => void;
   onDeleteClick: () => void;
   onUpdateClick: () => void;
 }
@@ -17,6 +19,8 @@ const Card: React.FC<CardProps> = ({
   tags,
   dateAdded,
   link,
+  ShowButton,
+  setShowButton,
   onDeleteClick,
   onUpdateClick,
 }) => {
@@ -122,18 +126,22 @@ const Card: React.FC<CardProps> = ({
               <LinkIcon className="w-4 h-4 text-gray-600" />
             </a>
           )}
-          <button
-            className="p-1 hover:bg-gray-100 rounded"
-            onClick={onUpdateClick}
-          >
-            <Pencil className="w-4 h-4 text-gray-600" />
-          </button>
-          <button
-            className="p-1 hover:bg-gray-100 rounded"
-            onClick={onDeleteClick}
-          >
-            <Trash2 className="w-4 h-4 text-gray-600" />
-          </button>
+          {ShowButton && (
+            <>
+              <button
+                className="p-1 hover:bg-gray-100 rounded"
+                onClick={onUpdateClick}
+              >
+                <Pencil className="w-4 h-4 text-gray-600" />
+              </button>
+              <button
+                className="p-1 hover:bg-gray-100 rounded"
+                onClick={onDeleteClick}
+              >
+                <Trash2 className="w-4 h-4 text-gray-600" />
+              </button>
+            </>
+          )}
         </div>
       </div>
 

@@ -30,6 +30,7 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [editedCard, setEditedCard] = useState<ContentSchema | null>(null);
   const [, setGlobalContent] = useRecoilState(ContentState);
+  const [ShowButton, setShowButton] = useState<boolean>(true);
   const navigate = useNavigate();
 
   if (!IsLogin) {
@@ -126,6 +127,8 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
               dateAdded={
                 content.updatedAt ? new Date(content.updatedAt) : new Date()
               }
+              ShowButton={ShowButton}
+              setShowButton={setShowButton}
               onDeleteClick={() =>
                 content._id && DeleteContentClicked(content._id)
               }

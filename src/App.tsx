@@ -10,6 +10,7 @@ import BlogPage from "./components/(navbarpages)/Blog";
 import UpcomingAIPage from "./components/(navbarpages)/Upcoming";
 import FeaturesPage from "./components/(navbarpages)/Feature";
 import Layout from "./config/layout";
+import SearchResultComponent from "./components/search/SearchResultComponent";
 
 const appRouting = createBrowserRouter([
   {
@@ -49,28 +50,37 @@ const appRouting = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/Home",
+        index: true,
         element: <HomePageComponent />,
       },
       {
-        path: "/Home/tweets",
+        path: "tweets",
         element: <TagPage tag="Tweet" />,
       },
       {
-        path: "/Home/videos",
+        path: "videos",
         element: <TagPage tag="Video" />,
       },
       {
-        path: "/Home/documents",
+        path: "documents",
         element: <TagPage tag="Document" />,
       },
       {
-        path: "/Home/links",
+        path: "links",
         element: <TagPage tag="Link" />,
+      },
+      {
+        path: "searchresults",
+        element: <SearchResultComponent />,
+      },
+      {
+        path: "*", // Debugging fallback route
+        element: <div>Route Not Found</div>,
       },
     ],
   },
 ]);
+
 const App = () => {
   return <RouterProvider router={appRouting} />;
 };
