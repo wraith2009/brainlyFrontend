@@ -90,7 +90,7 @@ const App: React.FC = () => {
       });
 
       if (response.token) {
-        const generatedLink = `http://localhost:5173/sharable-link/${response.token}`;
+        const generatedLink = `https://brainly-frontend-sable.vercel.app/sharable-link/${response.token}`;
         setSharableLink(generatedLink);
       }
     } catch (error) {
