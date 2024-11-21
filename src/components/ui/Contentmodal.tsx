@@ -128,7 +128,7 @@ const ContentModal: React.FC<ContentModalProps> = ({
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error creating content:");
     }
   };
 
@@ -138,14 +138,11 @@ const ContentModal: React.FC<ContentModalProps> = ({
     if (response) {
       setSuggestions(response.data.map((obj: { title: string }) => obj.title));
     }
-    console.log(response);
   };
 
   useEffect(() => {
     fetchTags();
   }, []);
-
-  console.log("in content modal", suggestions);
 
   if (!isOpen) return null;
 

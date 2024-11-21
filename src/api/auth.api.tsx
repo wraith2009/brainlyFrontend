@@ -20,7 +20,7 @@ const apiCall = async (
 
     return response.data;
   } catch (error) {
-    console.error("API call failed:", error);
+    console.error("API call failed:");
   }
 };
 

@@ -46,15 +46,11 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
   )?.title;
 
   const handleDeleteConfirm = async () => {
-    console.log("Delete card:", selectedCardId);
     if (selectedCardId) {
-      console.log("Deleting content with id:", selectedCardId);
       try {
         const response = await apiCall("/delete-content", {
           contentId: selectedCardId,
         });
-
-        console.log(response);
 
         if (response) {
           setGlobalContent((prevContents) =>
@@ -65,7 +61,7 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
           setSelectedCardId(null);
         }
       } catch (error) {
-        console.error("Error deleting content:", error);
+        console.error("Error deleting content:");
       }
     }
   };
@@ -101,7 +97,7 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
         setIsEditModalOpen(false);
         setEditedCard(null);
       } catch (error) {
-        console.error("Error updating content:", error);
+        console.error("Error updating content:");
       }
     }
   };

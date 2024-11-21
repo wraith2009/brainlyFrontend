@@ -8,6 +8,8 @@ import apiCall from "../../api/auth.api";
 import PopUpModal from "../ui/popupmodal";
 import { ContentState } from "../../recoil/atoms/content.atom";
 import { useRecoilState } from "recoil";
+import CardGridShimmer from "../shimmer/shimmer";
+import { useNavigate } from "react-router-dom";
 
 export interface ContentSchema {
   _id: string;
@@ -29,19 +31,49 @@ const App: React.FC = () => {
   const UserId = useRecoilValue(UserIdState);
   const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false);
   const [updateData, setUpdateData] = useState<ContentSchema | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      const checkValidation = async () => {
+        try {
+          const response = await apiCall("/verify-token", {}, "GET");
+          if (response.message === "Token is valid") {
+            setIsLoading(false);
+          } else {
+            navigate("/Sign-in");
+          }
+        } catch (error) {
+          console.error("User not logged in");
+          setIsLoading(false);
+          navigate("/Sign-in");
+        }
+      };
+
+      checkValidation();
+    }
+  }, []);
 
   const fetchUserContent = async () => {
     try {
       const response = await apiCall("/get-content", { userId: UserId });
       setGlobalContent(response.content);
+      setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching data:");
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchUserContent();
   }, []);
+
+  if (isLoading) {
+    return <CardGridShimmer />;
+  }
 
   const handleSubmitContent = (newContent: any) => {
     setGlobalContent((prev) => [
@@ -78,7 +110,7 @@ const App: React.FC = () => {
           setSelectedCardId(null);
         }
       } catch (error) {
-        console.error("Error deleting content:", error);
+        console.error("Error deleting content:");
       }
     }
   };
@@ -94,7 +126,7 @@ const App: React.FC = () => {
         setSharableLink(generatedLink);
       }
     } catch (error) {
-      console.error("error generating link", error);
+      console.error("error generating link");
     }
   };
 
@@ -105,8 +137,8 @@ const App: React.FC = () => {
         .then(() => {
           alert("Link copied to clipboard!");
         })
-        .catch((err) => {
-          console.error("Failed to copy link: ", err);
+        .catch((error) => {
+          console.error("Failed to copy link: ", error);
         });
     }
   };
@@ -142,7 +174,7 @@ const App: React.FC = () => {
         setIsModalUpdate(false);
         setUpdateData(null);
       } catch (error) {
-        console.error("Error updating content:", error);
+        console.error("Error updating content:");
       }
     }
   };

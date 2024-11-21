@@ -26,7 +26,7 @@ const SharedPageComponent: React.FC = () => {
       setData(response.content);
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching data:");
       setError("Failed to fetch data");
       setLoading(false);
     }
