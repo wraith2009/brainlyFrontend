@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "../ui/Card";
 import apiCall from "../../api/auth.api";
+import LoadingScreen from "../landingPage/LoadingScreen";
 
 interface Data {
   _id: string;
@@ -39,7 +40,7 @@ const SharedPageComponent: React.FC = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center min-h-screen">
-        Loading...
+        <LoadingScreen />
       </div>
     );
   if (error) return <div className="text-red-500 text-center">{error}</div>;
