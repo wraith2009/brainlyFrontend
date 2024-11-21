@@ -106,24 +106,34 @@ const TagPage: React.FC<TagPageProps> = ({ tag }) => {
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">{tag} Notes</h1>
       <div className="flex gap-6 flex-wrap">
-        {filteredContent.map((content) => (
-          <Card
-            key={content._id}
-            title={content.title}
-            content={content.content}
-            tags={content.tags || []}
-            link={content.link}
-            dateAdded={
-              content.dateAdded ? new Date(content.dateAdded) : new Date()
-            }
-            onDeleteClick={() =>
-              content._id && DeleteContentClicked(content._id)
-            }
-            onUpdateClick={() => {
-              content._id && handleUpdateClick(content as ContentSchema);
-            }}
-          />
-        ))}
+        {[...filteredContent]
+          .sort((a, b) => {
+            const dateA = a.updatedAt
+              ? new Date(a.updatedAt).getTime()
+              : new Date().getTime();
+            const dateB = b.updatedAt
+              ? new Date(b.updatedAt).getTime()
+              : new Date().getTime();
+            return dateB - dateA;
+          })
+          .map((content) => (
+            <Card
+              key={content._id}
+              title={content.title}
+              content={content.content}
+              tags={content.tags || []}
+              link={content.link}
+              dateAdded={
+                content.updatedAt ? new Date(content.updatedAt) : new Date()
+              }
+              onDeleteClick={() =>
+                content._id && DeleteContentClicked(content._id)
+              }
+              onUpdateClick={() => {
+                content._id && handleUpdateClick(content as ContentSchema);
+              }}
+            />
+          ))}
 
         <PopUpModal
           isOpen={isDeleteModalOpen}

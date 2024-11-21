@@ -212,20 +212,30 @@ const App: React.FC = () => {
       />
 
       <div className="flex gap-6 flex-wrap">
-        {globalContent.map((card) => (
-          <Card
-            key={card._id}
-            title={card.title}
-            content={card.content}
-            tags={card.tags || []}
-            link={card.link}
-            dateAdded={card.dateAdded ? new Date(card.dateAdded) : new Date()}
-            onDeleteClick={() => card._id && handleDeleteClick(card._id)}
-            onUpdateClick={() =>
-              card._id && handleUpdateClick(card as ContentSchema)
-            }
-          />
-        ))}
+        {[...globalContent]
+          .sort((a, b) => {
+            const dateA = a.updatedAt
+              ? new Date(a.updatedAt).getTime()
+              : new Date().getTime();
+            const dateB = b.updatedAt
+              ? new Date(b.updatedAt).getTime()
+              : new Date().getTime();
+            return dateB - dateA;
+          })
+          .map((card) => (
+            <Card
+              key={card._id}
+              title={card.title}
+              content={card.content}
+              tags={card.tags || []}
+              link={card.link}
+              dateAdded={card.updatedAt ? new Date(card.updatedAt) : new Date()}
+              onDeleteClick={() => card._id && handleDeleteClick(card._id)}
+              onUpdateClick={() =>
+                card._id && handleUpdateClick(card as ContentSchema)
+              }
+            />
+          ))}
       </div>
 
       <PopUpModal
