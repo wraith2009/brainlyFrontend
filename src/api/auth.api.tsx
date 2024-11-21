@@ -11,7 +11,7 @@ const apiCall = async (
   try {
     const response = await axios({
       method,
-      url: `${API_URL}/${url}`,
+      url: `${API_URL}${url}`,
       data,
       headers: {
         Authorization: `Bearer ${token}`,
