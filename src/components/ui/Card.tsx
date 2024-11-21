@@ -157,7 +157,7 @@ const Card: React.FC<CardProps> = ({
       </div>
 
       <div className="mt-4 text-sm text-gray-500">
-        Added on {dateAdded.toLocaleDateString()}
+        Added on {new Date(dateAdded).toLocaleDateString()}
       </div>
     </div>
   );
