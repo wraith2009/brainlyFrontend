@@ -19,7 +19,7 @@ const BlogPage = () => {
 
         <div className="flex  bg-gray-100 justify-center mt-12">
           <img
-            src="/blog illustration.webp"
+            src="https://res.cloudinary.com/dhrbg2jbi/image/upload/v1732176366/blog_illustration_lwevj3.webp"
             alt="Blog Coming Soon Illustration"
             className="max-w-full bg-gray-100 rounded-lg"
           />

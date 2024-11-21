@@ -20,7 +20,7 @@ const UpcomingAIPage = () => {
 
         <div className="flex justify-center">
           <img
-            src="/Ai.avif"
+            src="https://res.cloudinary.com/dhrbg2jbi/image/upload/v1732176350/Ai_uwrxgn.avif"
             alt="AI Assistance Coming Soon"
             className="max-w-full rounded-lg"
           />
