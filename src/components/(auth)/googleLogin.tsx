@@ -12,7 +12,7 @@ function GoogleLoginComponent() {
       if (authResult["code"]) {
         const url = `/auth/google?code=${authResult.code}`;
         const response = await apiCall(url, {}, "GET");
-        console.log("response", response);
+        // console.log("response", response);
         const token = response.token;
 
         if (token) {
