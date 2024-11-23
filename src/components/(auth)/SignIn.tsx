@@ -6,6 +6,7 @@ import apiCall from "../../api/auth.api";
 import { AuthSchema } from "../../config/validators/auth.validator";
 import { useSetRecoilState } from "recoil";
 import { UserIdState } from "../../recoil/atoms/auth.atom";
+import GoogleLoginComponent from "./googleLogin";
 
 const SignInPageComponent = () => {
   const [formData, setFormData] = useState({
@@ -219,7 +220,7 @@ const SignInPageComponent = () => {
                     </button>
                   </div>
                 </form>
-
+                <GoogleLoginComponent />
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600">
                     Don't have an account?{" "}

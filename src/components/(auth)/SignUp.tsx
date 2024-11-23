@@ -10,6 +10,7 @@ import {
 } from "../../config/validators/auth.validator";
 
 import { useNavigate, Link } from "react-router-dom";
+import GoogleLoginComponent from "./googleLogin";
 
 const SignUpPageComponent = () => {
   const [error, setError] = useState<string>("");
@@ -127,6 +128,7 @@ const SignUpPageComponent = () => {
                   </div>
                 </form>
 
+                <GoogleLoginComponent />
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600">
                     Already have an account?{" "}

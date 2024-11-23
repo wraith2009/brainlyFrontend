@@ -37,12 +37,12 @@ const LandingPageComponent = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <Header />
 
-      <main className="flex-grow">
-        <div className="flex flex-col gap-16 md:gap-24">
-          <div className="mt-36">
+      <main className="flex-grow w-full">
+        <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-12 md:gap-24">
+          <div className="w-full mt-20 md:mt-36">
             <Hero />
           </div>
 

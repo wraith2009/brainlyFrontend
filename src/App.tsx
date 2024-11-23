@@ -11,6 +11,7 @@ import UpcomingAIPage from "./components/(navbarpages)/Upcoming";
 import FeaturesPage from "./components/(navbarpages)/Feature";
 import Layout from "./config/layout";
 import SearchResultComponent from "./components/search/SearchResultComponent";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const appRouting = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ const appRouting = createBrowserRouter([
         element: <SearchResultComponent />,
       },
       {
-        path: "*", // Debugging fallback route
+        path: "*",
         element: <div>Route Not Found</div>,
       },
     ],
@@ -82,7 +83,18 @@ const appRouting = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={appRouting} />;
+  const clientID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  if (!clientID) {
+    return <div>Client ID is not set</div>;
+  }
+
+  console.log(clientID);
+  return (
+    <GoogleOAuthProvider clientId={clientID}>
+      <RouterProvider router={appRouting} />
+    </GoogleOAuthProvider>
+  );
 };
 
 export default App;
