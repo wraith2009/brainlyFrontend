@@ -7,7 +7,6 @@ const apiCall = async (
   method: string = "POST"
 ) => {
   try {
-    console.log("API call:", method, url, data);
     const token = localStorage.getItem("token");
     const response = await axios({
       method,
