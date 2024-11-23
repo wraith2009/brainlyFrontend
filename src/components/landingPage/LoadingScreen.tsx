@@ -1,53 +1,34 @@
-import { useState, useEffect } from "react";
-import Hero from "./HeroSection";
-import Footer from "./Footer";
-import Header from "./Header";
-import CTA from "./Cta";
-import LoadingScreen from "./LoadingScreen";
-import { useNavigate } from "react-router-dom";
-import apiCall from "../../api/auth.api";
-
-const LandingPageComponent = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    async function checkValidation() {
-      try {
-        if (token) {
-          const response = await apiCall("/verify-token", {}, "GET");
-          if (response.message === "Token is valid") {
-            navigate("/Home");
+const LoadingScreen = () => {
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+      <div className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-600">
+        Brainly is loading...
+      </div>
+      <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-gradient-to-r from-blue-500 to-violet-600 animate-loading-bar"
+          style={{
+            width: "100%",
+            transformOrigin: "left",
+            animation: "loading-bar 1.5s infinite",
+          }}
+        ></div>
+      </div>
+      <style>{`
+        @keyframes loading-bar {
+          0% {
+            transform: scaleX(0);
+          }
+          50% {
+            transform: scaleX(1);
+          }
+          100% {
+            transform: scaleX(0);
           }
         }
-      } catch (error) {
-        console.error("Token verification failed");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    checkValidation();
-  }, [token, navigate]);
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow w-full">
-        <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-12 md:gap-24">
-          <div className="w-full mt-20 md:mt-36">
-            <Hero />
-          </div>
-          <CTA />
-        </div>
-      </main>
-      <Footer />
+      `}</style>
     </div>
   );
 };
 
-export default LandingPageComponent;
+export default LoadingScreen;

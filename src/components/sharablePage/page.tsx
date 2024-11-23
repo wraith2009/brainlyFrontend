@@ -13,6 +13,7 @@ interface Data {
 }
 
 const SharedPageComponent: React.FC = () => {
+  console.log("in sharable link");
   const resetToken = window.location.href.split("/")[4];
   const [data, setData] = useState<Data[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
