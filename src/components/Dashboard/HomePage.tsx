@@ -9,7 +9,6 @@ import PopUpModal from "../ui/popupmodal";
 import { ContentState } from "../../recoil/atoms/content.atom";
 import { useRecoilState } from "recoil";
 import CardGridShimmer from "../shimmer/shimmer";
-import { useNavigate } from "react-router-dom";
 
 export interface ContentSchema {
   _id: string;
@@ -33,30 +32,6 @@ const App: React.FC = () => {
   const [updateData, setUpdateData] = useState<ContentSchema | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [ShowButton, setShowButton] = useState<boolean>(true);
-
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (token) {
-      const checkValidation = async () => {
-        try {
-          const response = await apiCall("/verify-token", {}, "GET");
-          if (response.message === "Token is valid") {
-            setIsLoading(false);
-          } else {
-            navigate("/Sign-in");
-          }
-        } catch (error) {
-          console.error("User not logged in");
-          setIsLoading(false);
-          navigate("/Sign-in");
-        }
-      };
-
-      checkValidation();
-    }
-  }, []);
 
   const fetchUserContent = async () => {
     try {
